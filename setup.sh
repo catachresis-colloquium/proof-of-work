@@ -6,7 +6,7 @@
 # Then hands off to `just setup` for project-specific configuration.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/hyperpolymath/proof-of-work/main/setup.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/catachresis-colloquium/proof-of-work/main/setup.sh | sh
 #   # or after cloning:
 #   ./setup.sh
 #
@@ -198,7 +198,7 @@ main() {
     # Step 2: Check if we're in the repo directory
     if [ ! -f "Justfile" ] && [ ! -f "justfile" ]; then
         warn "Not in a repo directory (no Justfile found)"
-        info "Clone first: git clone https://github.com/hyperpolymath/proof-of-work.git"
+        info "Clone first: git clone https://github.com/catachresis-colloquium/proof-of-work.git"
         info "Then: cd proof-of-work && ./setup.sh"
         exit 1
     fi

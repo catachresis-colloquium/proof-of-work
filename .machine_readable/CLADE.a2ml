@@ -3,9 +3,9 @@
 # See: https://github.com/hyperpolymath/gv-clade-index
 
 [identity]
-uuid = "8512bde0-7023-5704-a7d7-592e5a222672"
+uuid = "75fa4461-7923-5042-b99d-adc82b88d15d"
 primary-forge = "github"
-primary-owner = "hyperpolymath"
+primary-owner = "catachresis-colloquium"
 canonical-name = "proof-of-work"
 prefixed-name = "fv-proof-of-work"
 
@@ -16,7 +16,7 @@ assigned = "2026-03-16"
 rationale = ""
 
 [forges]
-github = "hyperpolymath/proof-of-work"
+github = "catachresis-colloquium/proof-of-work"
 gitlab = "hyperpolymath/proof-of-work"
 bitbucket = "hyperpolymath/proof-of-work"
 

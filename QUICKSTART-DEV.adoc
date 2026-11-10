@@ -29,7 +29,7 @@ nix develop
 
 [source,bash]
 ----
-git clone https://github.com/hyperpolymath/proof-of-work.git
+git clone https://github.com/catachresis-colloquium/proof-of-work.git
 cd proof-of-work
 just setup-dev
 ----
@@ -107,5 +107,5 @@ Or read `0-AI-MANIFEST.a2ml` and `.claude/CLAUDE.md` directly.
 == Get Help
 
 * **Architecture**: link:EXPLAINME.adoc[EXPLAINME.adoc]
-* **Wiki**: https://github.com/hyperpolymath/proof-of-work/wiki
+* **Wiki**: https://github.com/catachresis-colloquium/proof-of-work/wiki
 * **Report issue**: `just help-me`

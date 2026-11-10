@@ -55,7 +55,7 @@ RUN cargo build --release --no-default-features --features "$FEATURES"
 # =============================================================================
 FROM cgr.dev/chainguard/wolfi-base:latest AS runtime
 
-LABEL org.opencontainers.image.source="https://github.com/hyperpolymath/proof-of-work"
+LABEL org.opencontainers.image.source="https://github.com/catachresis-colloquium/proof-of-work"
 LABEL org.opencontainers.image.description="Proof-of-Work puzzle game with cryptographic verification"
 LABEL org.opencontainers.image.licenses="PMPL-1.0-or-later"
 LABEL org.opencontainers.image.authors="Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"

@@ -39,7 +39,7 @@ proof-of-work is a puzzle game built with https://bevyengine.org/[Bevy] where pl
 [source,bash]
 ----
 # Clone the repository
-git clone https://github.com/hyperpolymath/proof-of-work.git
+git clone https://github.com/catachresis-colloquium/proof-of-work.git
 cd proof-of-work
 
 # Build and run (debug mode with fast compile)

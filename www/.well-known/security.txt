@@ -3,8 +3,8 @@
 # See https://securitytxt.org/
 
 Contact: mailto:j.d.a.jewell@open.ac.uk
-Contact: https://github.com/hyperpolymath/proof-of-work/security/advisories
+Contact: https://github.com/catachresis-colloquium/proof-of-work/security/advisories
 Expires: 2027-03-02T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://github.com/hyperpolymath/proof-of-work/.well-known/security.txt
-Policy: https://github.com/hyperpolymath/proof-of-work/blob/main/SECURITY.md
+Canonical: https://github.com/catachresis-colloquium/proof-of-work/.well-known/security.txt
+Policy: https://github.com/catachresis-colloquium/proof-of-work/blob/main/SECURITY.md
