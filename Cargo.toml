@@ -41,7 +41,7 @@ bevy = { version = "0.19", default-features = false, features = [
 bevy_egui = "0.42"
 
 # Verification - optional, builds z3 from source for API compatibility
-z3 = { version = "0.19", features = ["static-link-z3"], optional = true }
+z3 = { version = "0.21", features = ["bundled"], optional = true }
 
 # Serialization
 serde = { version = "1", features = ["derive"] }
