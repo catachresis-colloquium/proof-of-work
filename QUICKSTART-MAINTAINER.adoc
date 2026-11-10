@@ -18,7 +18,7 @@ distribution on your platform.
 
 [source,bash]
 ----
-git clone https://github.com/hyperpolymath/proof-of-work.git
+git clone https://github.com/catachresis-colloquium/proof-of-work.git
 cd proof-of-work
 just build-release
 ----
@@ -125,5 +125,5 @@ Each instance has isolated config, data, and logs.
 
 == Reporting Issues
 
-* Upstream: https://github.com/hyperpolymath/proof-of-work/issues
+* Upstream: https://github.com/catachresis-colloquium/proof-of-work/issues
 * With diagnostic: `just help-me` (pre-fills context)

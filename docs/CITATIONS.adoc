@@ -9,26 +9,26 @@
   author = {Polymath, Hyper},
   title = {proof-of-work},
   year = {2025},
-  url = {https://github.com/hyperpolymath/proof-of-work},
+  url = {https://github.com/catachresis-colloquium/proof-of-work},
   license = {PMPL-1.0-or-later}
 }
 ----
 
 == Harvard Style
 
-Polymath, H. (2025) _proof-of-work_ [Computer software]. Available at: https://github.com/hyperpolymath/proof-of-work
+Polymath, H. (2025) _proof-of-work_ [Computer software]. Available at: https://github.com/catachresis-colloquium/proof-of-work
 
 == OSCOLA
 
-Hyper Polymath, 'proof-of-work' (2025) <https://github.com/hyperpolymath/proof-of-work>
+Hyper Polymath, 'proof-of-work' (2025) <https://github.com/catachresis-colloquium/proof-of-work>
 
 == MLA
 
-Polymath, Hyper. "proof-of-work." 2025, github.com/hyperpolymath/proof-of-work.
+Polymath, Hyper. "proof-of-work." 2025, github.com/catachresis-colloquium/proof-of-work.
 
 == APA 7
 
-Polymath, H. (2025). _proof-of-work_ [Computer software]. GitHub. https://github.com/hyperpolymath/proof-of-work
+Polymath, H. (2025). _proof-of-work_ [Computer software]. GitHub. https://github.com/catachresis-colloquium/proof-of-work
 
 == See Also
 

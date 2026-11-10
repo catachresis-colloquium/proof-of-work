@@ -81,7 +81,7 @@ cargo build --release --features full
 
 === Links
 
-* https://github.com/hyperpolymath/proof-of-work[Source Code]
-* https://github.com/hyperpolymath/proof-of-work/issues[Issue Tracker]
+* https://github.com/catachresis-colloquium/proof-of-work[Source Code]
+* https://github.com/catachresis-colloquium/proof-of-work/issues[Issue Tracker]
 * https://bevyengine.org/[Bevy Engine]
 * https://github.com/Z3Prover/z3[Z3 Prover]

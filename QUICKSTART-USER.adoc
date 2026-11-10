@@ -37,7 +37,7 @@ Before you begin, ensure you have:
 [source,bash]
 ----
 # Clone and set up
-git clone https://github.com/hyperpolymath/proof-of-work.git
+git clone https://github.com/catachresis-colloquium/proof-of-work.git
 cd proof-of-work
 just setup
 ----
@@ -102,7 +102,7 @@ just heal
 * **In-app**: `just run --help`
 * **Guided tour**: `just tour`
 * **Report a problem**: `just help-me` (pre-fills diagnostic context)
-* **Wiki**: https://github.com/hyperpolymath/proof-of-work/wiki
+* **Wiki**: https://github.com/catachresis-colloquium/proof-of-work/wiki
 
 == Uninstall
 
