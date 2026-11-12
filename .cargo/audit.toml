@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MPL-2.0
+#
+# cargo-audit configuration. Read by `cargo audit` (Cargo Audit workflow).
+#
+# Every ignore below is a reviewed decision, not a silenced alarm. Each entry
+# names the advisory, why it cannot be fixed by a dependency bump today, what
+# it would take to remove it, and a date by which it must be reviewed again.
+# cargo-audit has no expiry field, so the date is enforced by review: when it
+# passes, re-run `cargo audit` without the entry and either fix or re-justify.
+#
+# Ignores are only for *unmaintained* notices with no fixed release. Never add
+# a vulnerability (RUSTSEC entries without `Warning: unmaintained`) here.
+
+[advisories]
+ignore = [
+  # RUSTSEC-2024-0436: `paste` 1.0.15 is unmaintained. No fixed release
+  # exists, and none is coming (the crate is archived). No vulnerability is
+  # known. It is pulled in only by `steamworks` 0.13, which is optional and
+  # behind the `steam` feature. Remove when steamworks drops `paste`, or by
+  # replacing steamworks. Reviewed 2026-11-12; review again by 2027-02-12.
+  "RUSTSEC-2024-0436",
+
+  # RUSTSEC-2026-0441: `pin-utils` 0.1.0 is unmaintained. No fixed release
+  # exists. No vulnerability is known. It is pulled in only by `hyper`
+  # (via `reqwest`), which is optional and behind the `network` feature. Remove
+  # when hyper drops `pin-utils` (its replacement is std's `pin!`). Reviewed
+  # 2026-11-12; review again by 2027-02-12.
+  "RUSTSEC-2026-0441",
+]
