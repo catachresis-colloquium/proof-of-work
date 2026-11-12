@@ -74,7 +74,7 @@ fn aspect_html_injection_in_formula() {
         formula: stored, ..
     }) = board.piece_at(2, 2)
     {
-        assert_eq!(stored, formula);
+        assert_eq!(stored, &formula);
     }
 }
 
@@ -280,9 +280,11 @@ fn aspect_large_board_with_1000_pieces() {
         }
     }
 
+    // 1000 distinct cells (x in 0..100, y in 0..10), all in bounds and
+    // unoccupied, so every placement succeeds.
     assert_eq!(
-        placed_count, 100,
-        "Should place 100 pieces (10x10 grid of 100x100 board)"
+        placed_count, 1000,
+        "Should place all 1000 pieces (distinct cells on a 100x100 board)"
     );
     assert_eq!(board.piece_count(), placed_count);
 }
@@ -353,7 +355,7 @@ fn aspect_chinese_characters_in_formula() {
         formula: stored, ..
     }) = board.piece_at(1, 1)
     {
-        assert_eq!(stored, formula);
+        assert_eq!(stored, &formula);
     }
 }
 
@@ -373,7 +375,7 @@ fn aspect_arabic_characters_in_formula() {
         formula: stored, ..
     }) = board.piece_at(2, 2)
     {
-        assert_eq!(stored, formula);
+        assert_eq!(stored, &formula);
     }
 }
 
@@ -393,7 +395,7 @@ fn aspect_emoji_in_formula() {
         formula: stored, ..
     }) = board.piece_at(3, 3)
     {
-        assert_eq!(stored, formula);
+        assert_eq!(stored, &formula);
     }
 }
 
@@ -413,7 +415,7 @@ fn aspect_mixed_scripts_in_formula() {
         formula: stored, ..
     }) = board.piece_at(4, 4)
     {
-        assert_eq!(stored, formula);
+        assert_eq!(stored, &formula);
     }
 }
 
@@ -469,8 +471,10 @@ fn aspect_all_piece_variants_placeable() {
             position: (8, 8),
             variable: "y".into(),
         },
+        // A wire occupies its `from` cell, so it starts beside the assumption
+        // at (1, 1), as in e2e_complex_proof_structure, not on top of it.
         LogicPiece::Wire {
-            from: (1, 1),
+            from: (2, 1),
             to: (3, 3),
         },
     ];
