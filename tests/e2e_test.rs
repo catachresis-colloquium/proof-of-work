@@ -462,8 +462,16 @@ fn e2e_missing_assumptions() {
 
     // Only goal is on board, no assumptions
     assert_eq!(board.piece_count(), 1);
+    // The goal itself is within radius 10 of (2, 5), so the nearby pieces are
+    // not empty; what must hold is that none of them is an assumption.
     let pieces = board.pieces_near(2, 5, 10);
-    assert!(pieces.is_empty(), "No assumptions placed");
+    assert!(
+        pieces
+            .iter()
+            .all(|p| !matches!(p, LogicPiece::Assumption { .. })),
+        "No assumptions placed"
+    );
+    assert!(board.assumptions().is_empty(), "No assumptions placed");
 }
 
 #[test]
