@@ -18,7 +18,7 @@ but never verified.
 `+assert_total+` / `+idris_crash+` / `+%default partial+` in
 `+src/abi/ProofOfWork/ABI/*.idr+`, verified by grep 2026-05-20).
 * *LOC*: ~5,300 (Rust/Bevy).
-* *RUST-SPARK-STANCE.adoc*: present (structural compliance documented).
+* *RUST-SPARK-STANCE.adoc*: present, but its "Rust means Rust/SPARK" premise is withdrawn; see the note at its top and "Verifiers" below.
 * *Foreign.idr hang*: pre-existing defect, hangs under idris2 0.8.0 when
 type-checked in isolation. `+Invariants.idr+` does not import it so the
 ABI-verify CI still runs green. Tracked separately, not on the I1–I7
@@ -27,21 +27,21 @@ register.
 === Invariant register (I1–I7) — status of the seam obligations
 
 `+src/abi/.../Invariants.idr+` cross-references these IDs; this is the
-authoritative status table. *DISCHARGED* = machine-checked proof in the
-seam; *ASSUMPTION* = stated cryptographic hardness axiom (intentionally
-unprovable); *OWED* = stated as an erased obligation the Rust does not
+authoritative status table. `PROVEN` = machine-checked proof in the
+seam; `ASSUMED` = a stated assumption, not checked (for example a cryptographic hardness axiom, intentionally
+unprovable); `PROVEN-WITH-AXIOMS` = checked, resting on a named axiom; `OPEN` = stated as an erased obligation the Rust does not
 yet establish.
 
 [width="100%",cols="19%,45%,36%",options="header",]
 |===
 |ID |Property |Status
 |I1 |Verification soundness — a positive verdict implies a real
-`+VerifiedSolution+` certificate (adjacency + SMT entailment) |*OWED* —
+`+VerifiedSolution+` certificate (adjacency + SMT entailment) |`OPEN` —
 Rust does not return the witness; certificate type defined, refinement
 obligation open
 
 |I2 |Mock verifier no weaker than the Z3 path (no false wins in no-Z3
-builds) |*DISCHARGED* (2026-05-21) — `+verify_level_solution+` now
+builds) |`PROVEN` (2026-05-21) — `+verify_level_solution+` now
 returns a tri-valued
 `+VerificationVerdict { Verified \| Rejected \| CannotVerify }+`; the
 no-Z3 mock returns `+CannotVerify+` unconditionally, so "`mock accepts`"
@@ -50,35 +50,42 @@ uninhabited `+MockAccepts+` premise in `+Invariants.idr+`. Regression
 test: `+verification::tests::test_mock_never_accepts+`
 
 |I3 |`+placePiece+` preserves board well-formedness (in-bounds + no
-overlap) |*DISCHARGED* — `+placePreservesWF+` machine-checked in
+overlap) |`PROVEN` — `+placePreservesWF+` machine-checked in
 `+Invariants.idr+` (PR #60, 2026-05-19); the `+all+`/`+any+`
 cons-distribution lemmas needed for the foldl-based Prelude predicates
 landed inline as part of that PR; `+idris2 --check+` green
 
-|I4 |Every shipped/generated level is solvable |*OWED* — no solver-side
+|I4 |Every shipped/generated level is solvable |`OPEN` — no solver-side
 existence proof in Rust
 
-|I5 |Pack difficulty sequence is non-decreasing & in [1,5] |*DISCHARGED
-Idris2-side* + *DifficultyInRange half DISCHARGED Rust-side* —
+|I5 |Pack difficulty sequence is non-decreasing & in [1,5] |`PROVEN`
+Idris2-side; Rust side: the DifficultyInRange half is enforced by a runtime check, not proved, so `OPEN` —
 `+decNonDecreasing+` (total decision proc) +
 `+builtinPackMonotone : NonDecreasing [1,2,3,4,5]+` machine-checked
 Idris2-side; `+LevelPack::check_difficulty_in_range+` invoked by
 `+LevelPack::load+` enforces the `+[1,5]+` half Rust-side.
-*NonDecreasing half* remains OWED Rust-side: the schema does not carry a
+*NonDecreasing half* remains `OPEN` Rust-side: the schema does not carry a
 per-level difficulty sequence (`+struct Level+` has no `+difficulty+`
 field) — see "`What Needs Proving`" residual row.
 
-|I6 |Submission-signature binding (leaderboard integrity) |*ASSUMPTION*
-— rests on SHA-256 collision/2nd-preimage resistance;
-`+sha256CollisionResistant+` is a stated hardness axiom, conditional
-soundness `+signatureBindsPayload+` proven under it
+|I6 |Submission-signature binding (leaderboard integrity) |`ASSUMED`
+— `+signatureBindsPayload+` is checked, but only under
+`+sha256CollisionResistant+`, which states that `+sha256+` is *injective*
+on all strings. That is an idealisation, not collision resistance: real
+SHA-256 has a fixed-size output and so has collisions (pigeonhole), and
+collision resistance only says they are infeasible to find. The Idris2
+theory stays consistent because `+Digest+` wraps an unbounded `+String+`,
+but the result is about an ideal hash, not the shipped one. Until it is
+restated or admitted under `+TRUSTED-BASE-REDUCTION-POLICY+`, it is
+unrecorded proof debt (there is no `+docs/proof-debt.md+`), so it is not
+`PROVEN-WITH-AXIOMS`
 
-|I7 |Level-pack save/load round-trip identity |*ASSUMPTION* — reframed
+|I7 |Level-pack save/load round-trip identity |`ASSUMED` — reframed
 in PR #62 (2026-05-20) as an explicit serde-correctness postulate
 (`+serdeRoundTripCorrect+`); `+levelRoundTrip+` is now a derived alias
-rather than a bare OWED postulate. Promotion to a discharged theorem
+rather than a bare `OPEN` postulate. Promotion to a discharged theorem
 would require either property-testing against the Rust serde
-implementation or a SPARK proof of the encoder/decoder pair
+implementation or a Creusot (Pearlite) and Verus proof of the encoder/decoder pair
 |===
 
 === What Needs Proving (priority order)
@@ -110,10 +117,10 @@ level would inhabit `+packLevelsSolvable+`; until then the Idris2
 statement is intentionally unprovable.
 
 |Pack round-trip (I7) |`+load . save = id+` on well-formed packs
-|Community-pack corruption across disk |I7 (now ASSUMPTION)
+|Community-pack corruption across disk |I7 (now `ASSUMED`)
 |`+src/levels/mod.rs::LevelPack::save+` / `+::load+`. Discharge route:
 property-test the Rust serde against `+serdeRoundTripCorrect+`, or write
-a SPARK proof of the encoder/decoder pair. Not blocking.
+a Creusot (Pearlite) and Verus proof of the encoder/decoder pair. Not blocking.
 
 |Level progression (I5 — NonDecreasing half) |Loader must call
 `+decNonDecreasing+` per pack |Non-monotonic difficulty breaks
@@ -132,26 +139,53 @@ on the resulting `+Vec<u8>+` in `+load_all+`. Both are out of scope for
 the in-range PR; tracked here as a residual.
 |===
 
-I2 and I3 are *DISCHARGED* (see register above); not in the
+I2 and I3 are `PROVEN` (see register above); not in the
 remaining-proof list. I6 is an intentional cryptographic-hardness
 assumption and will not migrate to a theorem under any realistic
 schedule.
 
-=== Recommended Prover
+=== Verifiers
 
-*Idris2* — The game’s THEME is cryptographic proof-of-work. Having
-formal proofs that the verification is sound would be thematically
-perfect and practically valuable. The Idris2 ABI seam is in place;
-remaining work is mostly Rust-side (I1 and I4 still need API or
-implementation changes before the corresponding Idris2 statements become
-inhabitable).
+Assigned per
+https://github.com/hyperpolymath/standards/blob/main/3-practice/PROOF-POLICY.adoc[PROOF-POLICY]:
+
+* *Idris2* for the ABI seam (`+src/abi/+`). It is in place, and
+  `+abi-verify.yml+` builds it.
+* *Creusot*, with contracts in *Pearlite*, and *Verus*, both by default,
+  for the first-party Rust side (§1.2): I1 (`+verify_level_solution+`,
+  `+verify_formula+`), I4 (puzzle generation), the Rust half of I5, and the
+  serde round trip of I7. No Rust contract or Verus code exists yet, so
+  each of these stays `OPEN`.
+* *SPARK* is for Ada code. Earlier text proposed SPARK for these Rust
+  obligations; that rested on a withdrawn reading of the policy (see the
+  note at the top of `+RUST-SPARK-STANCE.adoc+`).
+
+The game's theme is cryptographic proof-of-work, so formal proofs that
+verification is sound would fit it well. Most remaining work is Rust-side:
+I1 and I4 still need API or implementation changes before their Idris2
+statements can be inhabited.
+
+=== Trusted base
+
+`+sha256CollisionResistant+` (I6) and `+serdeRoundTripCorrect+` (I7) are
+declared without a definition. Neither carries an `+-- AXIOM:+` or
+`+// TRUSTED:+` marker, and there is no `+docs/proof-debt.md+`. Under
+`+TRUSTED-BASE-REDUCTION-POLICY.adoc+` each must become one of these:
+
+* a *budgeted* trust (I7: property-test serde over the loader's levels,
+  with the refutation budget written down);
+* a *necessary axiom* (I6 qualifies only once it is restated as an
+  idealisation and named as one; injectivity is false of SHA-256);
+* a recorded debt.
+
+Choosing which is the owner's call.
 
 === Priority
 
 *LOW* (severity) but the seam is now real: structural compliance done,
 I2 + I3 + I5 discharged, I6 and I7 stated as explicit assumptions
 (cryptographic hardness, serde correctness), and I1/I4 tracked as erased
-OWED obligations under CI (`+abi-verify.yml+`) so they cannot silently
+`OPEN` obligations under CI (`+abi-verify.yml+`) so they cannot silently
 rot into `+believe_me+`. Highest-value remaining target is *I1* (the
 Rust verifier returns a `+Verified+` variant but doesn’t yet carry the
 `+VerifiedSolution+` certificate the seam types).
