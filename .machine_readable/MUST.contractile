@@ -63,7 +63,7 @@
 
     ; Structure
     (must ".machine_readable/ directory preserved")
-    (must "0-AI-MANIFEST.a2ml preserved")
+    (must ".claude/CLAUDE.md preserved (agent entry point; 0-AI-MANIFEST.a2ml retired with A2ML, standards owner ruling 2026-11-13)")
     (must "no SCM files in repo root — only in .machine_readable/")
 
     ; CI

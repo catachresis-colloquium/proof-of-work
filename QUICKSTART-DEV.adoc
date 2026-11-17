@@ -62,7 +62,7 @@ proof-of-work/
 ├── Justfile              # Task runner recipes
 ├── guix.scm              # Guix environment
 ├── flake.nix             # Nix environment (fallback)
-└── 0-AI-MANIFEST.a2ml    # AI agent entry point
+└── .claude/CLAUDE.md     # AI agent entry point
 ----
 
 == Key Recipes
@@ -102,7 +102,7 @@ If using an AI assistant, load the warmup context first:
 just llm-context    # Outputs role-appropriate context
 ----
 
-Or read `0-AI-MANIFEST.a2ml` and `.claude/CLAUDE.md` directly.
+Or read `.claude/CLAUDE.md` directly.
 
 == Get Help
 

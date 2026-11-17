@@ -18,8 +18,8 @@ We welcome contributions in many forms:
 
 ## Getting Started
 
-1.  **Read the AI Manifest:** Start with `0-AI-MANIFEST.a2ml` (if
-    present) to understand the repository structure.
+1.  **Read the agent instructions:** Start with `.claude/CLAUDE.md` to
+    understand the repository structure and policies.
 
 2.  **Environment:** Use `nix` `develop` or `direnv` `allow` to set up
     your tools.
