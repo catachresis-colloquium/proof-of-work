@@ -48,12 +48,12 @@ jobs:
       - name: No holes or escape hatches in the seam
         working-directory: src/abi
         run: |
-          set -euo pipefail
+          set -eu
+          # The container runs steps with POSIX sh, so no pipefail here.
           # Idris2 accepts a ?hole and these escape hatches even with
           # totality on, so the build alone would not catch them.
           pattern='(^|[^A-Za-z0-9_])\?[a-z_][A-Za-z0-9_]*|believe_me|assert_total|assert_smaller|idris_crash|%default[[:space:]]+(partial|covering)|^[[:space:]]*(partial|covering)[[:space:]]'
-          hits=$(find . -name '*.idr' -not -path './build/*' -print0 \
-            | xargs -0 grep -nE "$pattern" \
+          hits=$(find . -name '*.idr' -not -path './build/*' -exec grep -HnE "$pattern" {} + \
             | grep -vE '^[^:]+:[0-9]+:[[:space:]]*(--|\|\|\|)' || true)
           if [ -n "$hits" ]; then
             echo "::error::Holes or escape hatches in the ABI seam:"
@@ -64,7 +64,7 @@ jobs:
       - name: Build (typecheck) the ABI seam
         working-directory: src/abi
         run: |
-          set -euo pipefail
+          set -eu
           idris2 --version
           # --build typechecks every module in the .ipkg in dependency
           # order, with totality required by `opts = "--total"` in the
