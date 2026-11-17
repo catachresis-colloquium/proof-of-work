@@ -167,10 +167,59 @@ statements can be inhabited.
 
 === Trusted base
 
-`+sha256CollisionResistant+` (I6) and `+serdeRoundTripCorrect+` (I7) are
-declared without a definition. Neither carries an `+-- AXIOM:+` or
-`+// TRUSTED:+` marker, and there is no `+docs/proof-debt.md+`. Under
-`+TRUSTED-BASE-REDUCTION-POLICY.adoc+` each must become one of these:
+Idris2 accepts a declaration with no definition, even with totality
+required, so each of these acts as a postulate. Five such declarations in
+the seam are statements rather than abstract functions:
+
+[cols="2,1,3",options="header"]
+|===
+|Declaration |Invariant |True as stated?
+
+|`+Invariants.packLevelsSolvable : (lvls : List Level) -> All Solvable lvls+`
+|I4
+|True, but it says nothing about the levels. `+Solvable lvl+` never
+mentions `+lvl+`, so one solved board satisfies it for every level. I4
+needs `+Solvable+` to tie the solution to the level's own board and goal.
+
+|`+Invariants.progressionMonotone : (ds : List Difficulty) -> NonDecreasing ds+`
+|I5
+|No. Its own doc comment says so: `+[2,1]+` is not non-decreasing.
+
+|`+Foreign.acceptedImpliesVerified+`
+|I1
+|No. It gives a `+VerifiedSolution+` for any board, given only
+`+VerifyAccepted = VerifyAccepted+`.
+
+|`+Invariants.sha256CollisionResistant+`
+|I6
+|Consistent, because `+sha256+` is abstract (the identity would satisfy
+it). False of real SHA-256 (see the I6 row above).
+
+|`+Invariants.serdeRoundTripCorrect+`
+|I7
+|Satisfiable: `+serialise+` and `+deserialise+` are abstract, so some pair
+of functions makes it true.
+|===
+
+All five are erased (quantity `0`). Erased `Void` can be derived from
+`+progressionMonotone+` (apply it to `+[2,1]+`) and from
+`+acceptedImpliesVerified+` (apply it to the empty board), so the seam's
+theory is inconsistent as a whole. Both derivations were checked with
+Idris2 0.8.0 on 2026-11-17, in a scratch module that was not committed.
+None of the results marked `PROVEN` uses them: `placePreservesWF`,
+`mockNoStrongerThanZ3`, `decNonDecreasing` and `builtinPackMonotone` were
+checked for this on 2026-11-17. A future proof must not use them either.
+The three `OPEN` obligations would be better stated as type definitions
+(the proposition to be proved) than as declarations that assert it.
+
+CI now requires totality (`+opts = "--total"+` in the `.ipkg`) and refuses
+holes and escape hatches. It cannot detect a declaration with no
+definition, so this table is the record of them.
+
+None of the five carries an `+-- AXIOM:+` or `+// TRUSTED:+` marker, and
+there is no `+docs/proof-debt.md+`. Under
+`+TRUSTED-BASE-REDUCTION-POLICY.adoc+` each of I6 and I7 must become one of
+these:
 
 * a *budgeted* trust (I7: property-test serde over the loader's levels,
   with the refutation budget written down);
