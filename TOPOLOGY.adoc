@@ -41,7 +41,7 @@
                         ┌─────────────────────────────────────────┐
                         │          REPO INFRASTRUCTURE            │
                         │  Justfile / Cargo   .machine_readable/  │
-                        │  Nix / Wolfi        0-AI-MANIFEST.a2ml  │
+                        │  Nix / Wolfi        .claude/CLAUDE.md   │
                         └─────────────────────────────────────────┘
 ....
 

@@ -1,6 +1,9 @@
-## Machine-Readable Artefacts
+## Machine-Readable Artefacts (legacy A2ML, pending migration)
 
-The following files in `.machine_readable/` contain structured project metadata:
+A2ML is retired estate-wide (standards owner ruling 2026-11-13); these files
+are still the only state source here until they migrate to a repo deed
+(`proof-of-work_chora.deed`, standards A7 plan). Read them, but do not create
+new `.a2ml` files:
 
 - `.machine_readable/6a2/STATE.a2ml` - Current project state and progress
 - `.machine_readable/6a2/META.a2ml` - Architecture decisions and development practices
