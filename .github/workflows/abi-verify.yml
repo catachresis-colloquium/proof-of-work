@@ -45,14 +45,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7.0.1
 
+      - name: No holes or escape hatches in the seam
+        working-directory: src/abi
+        run: |
+          set -eu
+          # The container runs steps with POSIX sh, so no pipefail here.
+          # Idris2 accepts a ?hole and these escape hatches even with
+          # totality on, so the build alone would not catch them.
+          pattern='(^|[^A-Za-z0-9_])\?[a-z_][A-Za-z0-9_]*|believe_me|assert_total|assert_smaller|idris_crash|%default[[:space:]]+(partial|covering)|^[[:space:]]*(partial|covering)[[:space:]]'
+          hits=$(find . -name '*.idr' -not -path './build/*' -exec grep -HnE "$pattern" {} + \
+            | grep -vE '^[^:]+:[0-9]+:[[:space:]]*(--|\|\|\|)' || true)
+          if [ -n "$hits" ]; then
+            echo "::error::Holes or escape hatches in the ABI seam:"
+            echo "$hits"
+            exit 1
+          fi
+
       - name: Build (typecheck) the ABI seam
         working-directory: src/abi
         run: |
+          set -eu
           idris2 --version
           # --build typechecks every module in the .ipkg in dependency
-          # order. A real regression (ill-typed lemma, a discharged proof
-          # that stops reducing, a stray `?hole`/`believe_me`) fails here.
-          # The intentional erased OWED postulates and the I6 hardness
-          # ASSUMPTION are well-typed and do NOT fail the build — they are
-          # tracked in PROOF-NEEDS.md, not hidden.
+          # order, with totality required by `opts = "--total"` in the
+          # .ipkg. An ill-typed lemma or a non-total definition fails
+          # here; holes and escape hatches are refused by the step above.
+          # A declaration with no definition (the erased OWED postulates,
+          # the I6 and I7 assumptions) is accepted by Idris2 and does NOT
+          # fail the build. PROOF-NEEDS.adoc lists each one.
           idris2 --build proof-of-work-abi.ipkg

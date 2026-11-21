@@ -20,3 +20,7 @@ sourcedir = "."
 modules = ProofOfWork.ABI.Types
         , ProofOfWork.ABI.Foreign
         , ProofOfWork.ABI.Invariants
+
+-- Totality is required here: Idris2 refuses --total as a command-line
+-- override for package commands.
+opts = "--total"
