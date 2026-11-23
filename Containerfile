@@ -33,18 +33,22 @@ WORKDIR /app
 # Copy manifests first (for caching)
 COPY Cargo.toml Cargo.lock ./
 
-# Create dummy source for dependency caching
-RUN mkdir src && \
+# Create dummy sources for dependency caching. Cargo.toml declares a
+# [[bench]] target, so a stub bench is needed too: without it cargo refuses
+# to parse the manifest ("can't find `proof_of_work_bench` bench").
+RUN mkdir src benches && \
     echo 'fn main() {}' > src/main.rs && \
-    echo 'pub fn lib() {}' > src/lib.rs
+    echo 'pub fn lib() {}' > src/lib.rs && \
+    echo 'fn main() {}' > benches/proof_of_work_bench.rs
 
 # Build dependencies only (cached layer)
 # Use --no-default-features to exclude z3-verify (default feature)
 RUN cargo build --release --no-default-features --features headless && \
-    rm -rf src target/release/deps/proof_of_work* target/release/proof-of-work*
+    rm -rf src benches target/release/deps/proof_of_work* target/release/proof-of-work*
 
-# Copy actual source
+# Copy actual sources
 COPY src ./src
+COPY benches ./benches
 
 # Build the real binary (headless by default, no z3-verify)
 ARG FEATURES="headless"

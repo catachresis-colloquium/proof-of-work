@@ -7,4 +7,4 @@ Allow: /
 
 # This project welcomes AI contributions under PMPL-1.0-or-later
 # See .machine_readable/ for structured metadata
-# See 0-AI-MANIFEST.a2ml or AI.a2ml for agent entry point
+# See .claude/CLAUDE.md for the agent entry point
