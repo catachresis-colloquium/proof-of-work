@@ -5,6 +5,19 @@
 
 toc::[]
 
+[IMPORTANT]
+.Superseded on the verifier for Rust (2026-11-17)
+====
+This document rests on the reading that *"Rust" means "Rust/SPARK"*. That
+reading has been withdrawn. Under
+https://github.com/hyperpolymath/standards/blob/main/3-practice/PROOF-POLICY.adoc[PROOF-POLICY]
+§1.2, first-party Rust is verified with *Creusot* (contracts in *Pearlite*)
+and *Verus*, both by default, and SPARK is for Ada code. The Idris2 ABI seam
+described below still applies. `PROOF-NEEDS.adoc` names the verifier for
+each obligation. Whether to rewrite or retire this document is the owner's
+decision.
+====
+
 == Summary
 
 This repository's application logic is written in Rust (Bevy game engine
