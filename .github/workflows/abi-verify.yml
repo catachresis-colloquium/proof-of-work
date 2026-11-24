@@ -52,7 +52,9 @@ jobs:
           # The container runs steps with POSIX sh, so no pipefail here.
           # Idris2 accepts a ?hole and these escape hatches even with
           # totality on, so the build alone would not catch them.
-          pattern='(^|[^A-Za-z0-9_])\?[a-z_][A-Za-z0-9_]*|believe_me|assert_total|assert_smaller|idris_crash|%default[[:space:]]+(partial|covering)|^[[:space:]]*(partial|covering)[[:space:]]'
+          # A partial or covering modifier may stand alone on its line or follow
+          # a visibility keyword (export partial), and Idris2 honours it there.
+          pattern='(^|[^A-Za-z0-9_])\?[a-z_][A-Za-z0-9_]*|believe_me|assert_total|assert_smaller|idris_crash|%default[[:space:]]+(partial|covering)|^[[:space:]]*((public[[:space:]]+)?export[[:space:]]+|private[[:space:]]+)?(partial|covering)([[:space:]]|$)'
           hits=$(find . -name '*.idr' -not -path './build/*' -exec grep -HnE "$pattern" {} + \
             | grep -vE '^[^:]+:[0-9]+:[[:space:]]*(--|\|\|\|)' || true)
           if [ -n "$hits" ]; then
@@ -66,6 +68,10 @@ jobs:
         run: |
           set -eu
           idris2 --version
+          # Totality comes only from opts in the .ipkg, and the flag must sit
+          # inside the quoted value: opts = "" -- --total sets no options.
+          grep -Eq '^opts[[:space:]]*=[[:space:]]*"[^"]*--total[^"]*"' proof-of-work-abi.ipkg \
+            || { echo "::error::proof-of-work-abi.ipkg must set opts = \"--total\""; exit 1; }
           # --build typechecks every module in the .ipkg in dependency
           # order, with totality required by `opts = "--total"` in the
           # .ipkg. An ill-typed lemma or a non-total definition fails
